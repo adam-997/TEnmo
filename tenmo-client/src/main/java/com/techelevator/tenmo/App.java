@@ -68,7 +68,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
+    	System.out.println("Your current balance is: " );
+    	currentUser.getUser().getId().
+		// TODO Auto-generated method
 		
 	}
 

@@ -1,7 +1,3 @@
--- ********************************************************************************
--- This script creates the database users and grants them the necessary permissions
--- ********************************************************************************
-
 CREATE USER tenmo_owner
 WITH PASSWORD 'tebucks';
 
