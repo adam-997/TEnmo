@@ -22,10 +22,10 @@ public class JdbcAccount implements AccountDao {
     @Override
     public Account getAccountByAccountId(int accountId) {
         String sql = "SELECT account_id, user_id, balance FROM accounts WHERE account_id = ?;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId);
+        SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, accountId);
         Account account = null;
-        if(results.next()){
-            account = mapRowToAccount(results);
+        if(rs.next()){
+            account = mapRowToAccount(rs);
         }
         return account;
     }
@@ -35,7 +35,7 @@ public class JdbcAccount implements AccountDao {
     public Balance getBalanceByAccountId(int accountId) {
         String sql = "SELECT balance FROM accounts WHERE account_id = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, accountId);
-        Balance balance = null;
+        Balance balance = new Balance();
         if(results.next()){
             String userBalance = results.toString();
             balance.setBalance(Double.parseDouble(userBalance));
@@ -44,10 +44,12 @@ public class JdbcAccount implements AccountDao {
     }
 
     private Account mapRowToAccount(SqlRowSet rs) {
-        Account account = new Account();
-        account.setAccountId(rs.getInt("user_id"));
-        account.setAccountId(rs.getInt("account_id"));
-        account.setBalance(rs.getDouble("balance"));
-        return account;
+        int accountId = rs.getInt("account_id");
+        int userAccountId = rs.getInt("user_id");
+
+        Balance balance = new Balance();
+        String accountBalance = rs.getString("balance");
+        balance.setBalance( Double.parseDouble(accountBalance));
+        return new Account(accountId, userAccountId, balance);
     }
 }
