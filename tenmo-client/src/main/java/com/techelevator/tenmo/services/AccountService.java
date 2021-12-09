@@ -36,7 +36,7 @@ public class AccountService {
         Balance balance = null;
         HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
-            ResponseEntity<Balance> response = restTemplate.exchange(baseUrl + "balance" , HttpMethod.GET, entity, Balance.class);
+            ResponseEntity<Balance> response = restTemplate.exchange(baseUrl + "/balance" , HttpMethod.GET, entity, Balance.class);
             balance = response.getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Request unsuccessful. Code: " + e.getRawStatusCode());

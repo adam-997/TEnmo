@@ -33,11 +33,11 @@ public class JdbcAccount implements AccountDao {
 
     @Override
     public Balance getBalanceByUsername(String username) {
-        String sql = "SELECT balance FROM accounts JOIN users ON accounts.user_id = users.user_id WHERE username = '?';";
+        String sql = "SELECT balance FROM accounts JOIN users ON accounts.user_id = users.user_id WHERE username = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, username);
         Balance balance = new Balance();
         if(results.next()){
-            String userBalance = results.toString();
+            String userBalance = results.getString("balance");
             balance.setBalance(Double.parseDouble(userBalance));
         }
         return balance;
