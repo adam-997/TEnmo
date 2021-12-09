@@ -20,22 +20,23 @@ public class AccountController {
     private TransferStatusesDao transferStatusesDao;
     private UserDao userDao;
 
+
     @RequestMapping(path = "/balance", method = RequestMethod.GET)
-    public Balance getBalance(@Valid @RequestBody int accountId) {
-        return accountDao.getBalanceByAccountId(accountId);
+    public Balance getBalance(Principal principal) {
+        return accountDao.getBalanceByUsername(principal.getName());
     }
 
-    @RequestMapping(path = "/users", method = RequestMethod.GET)
+    @RequestMapping(path = "account/users", method = RequestMethod.GET)
     public List<User> getAllUsers(){
         return userDao.findAll();
     }
 
-    @RequestMapping(path = "/transfers/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "account/transfers/{userId}", method = RequestMethod.GET)
     public List<Transfer> getTransfersByUserId(@PathVariable int userId){
         return transfersDao.getTransfersByUserId(userId);
     }
 
-    @RequestMapping(path = "/transfers/{transferId}", method = RequestMethod.GET)
+    @RequestMapping(path = "account/transfers/{transferId}", method = RequestMethod.GET)
     public Transfer getTransfersByTransferId(@PathVariable int transferId){
         return transfersDao.getTransferByTransferId(transferId);
     }
@@ -45,7 +46,7 @@ public class AccountController {
         return accountDao.getAccountByAccountId(accountId);
     }
 
-    @RequestMapping(path = "/account/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/account/users/{userId}", method = RequestMethod.GET)
     public Account getAccountByUserId(@PathVariable int userId) {
         return accountDao.getAccountByUserId(userId);
     }

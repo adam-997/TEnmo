@@ -9,7 +9,7 @@ public interface AccountDao {
 
     Account getAccountByAccountId(int accountId);
 
-    Balance getBalanceByAccountId(int accountId);
+    Balance getBalanceByUsername(String username);
 
 
 

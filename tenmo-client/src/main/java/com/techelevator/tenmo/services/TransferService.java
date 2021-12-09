@@ -18,10 +18,10 @@ public class TransferService {
         try {
             transfer = restTemplate.getForObject(baseUrl + transferId, Transfer.class);
         } catch (RestClientResponseException e) {
-            return transfer;
         }
-
-        private Transfer getTransferByUserId ( int userId){
+        return transfer;
+    }
+        private Transfer getTransferByUserId ( int userId) {
             Transfer transfer = null;
             try {
                 transfer = restTemplate.getForObject(baseUrl + userId, Transfer.class);
@@ -70,4 +70,4 @@ public class TransferService {
             return new HttpEntity<>(transfer, headers);
         }
     }
-}
+

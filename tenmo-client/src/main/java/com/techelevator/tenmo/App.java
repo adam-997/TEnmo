@@ -1,9 +1,9 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Balance;
 import com.techelevator.tenmo.model.UserCredentials;
-import com.techelevator.tenmo.services.AuthenticationService;
-import com.techelevator.tenmo.services.AuthenticationServiceException;
+import com.techelevator.tenmo.services.*;
 import com.techelevator.view.ConsoleService;
 
 public class App {
@@ -21,7 +21,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private static final String MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS = "View your pending requests";
 	private static final String MAIN_MENU_OPTION_LOGIN = "Login as different user";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_VIEW_BALANCE, MAIN_MENU_OPTION_SEND_BUCKS, MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS, MAIN_MENU_OPTION_REQUEST_BUCKS, MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS, MAIN_MENU_OPTION_LOGIN, MENU_OPTION_EXIT };
-	
+
+	private AccountService accountService;
+	private TransferService transferService;
+	private TransferTypesServices transferTypesServices;
+	private TransferStatusService transferStatusService;
     private AuthenticatedUser currentUser;
     private ConsoleService console;
     private AuthenticationService authenticationService;
@@ -34,6 +38,11 @@ private static final String API_BASE_URL = "http://localhost:8080/";
     public App(ConsoleService console, AuthenticationService authenticationService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
+		this.accountService = new AccountService();
+		this.transferService = new TransferService();
+		this.transferStatusService = new TransferStatusService();
+		this.transferTypesServices = new TransferTypesServices();
+		this.currentUser = new AuthenticatedUser();
 	}
 
 	public void run() {
@@ -68,6 +77,8 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
+    	Balance balance = accountService.getBalanceByUser(currentUser);
+    	System.out.println("Your current balance is: $" + balance);
 
 		// TODO Auto-generated method
 		
