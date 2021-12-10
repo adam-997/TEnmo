@@ -12,14 +12,15 @@ import java.util.List;
 @PreAuthorize("isAuthenticated()")
 public class AccountController {
 
+     @Autowired
      AccountDao accountDao;
-
+     @Autowired
      TransfersDao transfersDao;
-
+     @Autowired
      TransferTypesDao transferTypesDao;
-
+     @Autowired
      TransferStatusesDao transferStatusesDao;
-
+     @Autowired
      UserDao userDao;
 
 
