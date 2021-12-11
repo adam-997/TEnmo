@@ -1,41 +1,46 @@
 package com.techelevator.tenmo.services;
 
-import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.AuthenticatedUser;
 import com.techelevator.tenmo.model.TransferStatuses;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 public class TransferStatusService {
 
-    private String baseUrl;
-    private RestTemplate restTemplate;
+    private final String baseUrl = "http://localhost:8080/";
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    private TransferStatuses getTransferStatusByDesc (String description) {
+    public TransferStatuses getTransferStatusByDesc (AuthenticatedUser authenticatedUser, String description) {
         TransferStatuses transferStatuses = null;
+        HttpEntity<TransferStatuses> entity = makeEntity(authenticatedUser);
         try {
-            transferStatuses = restTemplate.getForObject(baseUrl + description, TransferStatuses.class);
+            transferStatuses = restTemplate.exchange(baseUrl + "transferstatus/filter?description=" + description, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
+
+        } catch (
+                RestClientResponseException e) {
+        }
+        return transferStatuses;
+    }
+    public TransferStatuses getTransferStatusById (AuthenticatedUser authenticatedUser ,int transferStatusId) {
+        TransferStatuses transferStatuses = null;
+        HttpEntity<TransferStatuses> entity = makeEntity(authenticatedUser);
+        try {
+            transferStatuses = restTemplate.exchange(baseUrl + "transferstatus/" + transferStatusId, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
         } catch (
                 RestClientResponseException e) {
         }
         return transferStatuses;
     }
 
-    private TransferStatuses getTransferStatusById (int transferStatusId) {
-        TransferStatuses transferStatuses = null;
-        try {
-            transferStatuses = restTemplate.getForObject(baseUrl + transferStatusId, TransferStatuses.class);
-        } catch (
-                RestClientResponseException e) {
-        }
-        return transferStatuses;
-    }
-
-    private HttpEntity<TransferStatuses> makeEntity (TransferStatuses transferStatuses){
+    private HttpEntity<TransferStatuses>  makeEntity (AuthenticatedUser authenticatedUser){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(transferStatuses, headers);
+        headers.setBearerAuth(authenticatedUser.getToken());
+
+        return new HttpEntity<>(headers);
     }
 }

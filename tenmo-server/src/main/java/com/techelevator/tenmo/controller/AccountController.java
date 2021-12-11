@@ -5,6 +5,8 @@ import com.techelevator.tenmo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
@@ -12,34 +14,34 @@ import java.util.List;
 @PreAuthorize("isAuthenticated()")
 public class AccountController {
 
-     @Autowired
-     AccountDao accountDao;
-     @Autowired
-     TransfersDao transfersDao;
-     @Autowired
-     TransferTypesDao transferTypesDao;
-     @Autowired
-     TransferStatusesDao transferStatusesDao;
-     @Autowired
-     UserDao userDao;
+    @Autowired
+    AccountDao accountDao;
+    @Autowired
+    TransfersDao transfersDao;
+    @Autowired
+    TransferTypesDao transferTypesDao;
+    @Autowired
+    TransferStatusesDao transferStatusesDao;
+    @Autowired
+    UserDao userDao;
 
+    @RequestMapping(path = "/account/balance", method = RequestMethod.GET)
+    public Balance getBalanceByUser( Principal principal) {
 
-    @RequestMapping(path = "/balance", method = RequestMethod.GET)
-    public Balance getBalance(Principal principal) {
         return accountDao.getBalanceByUsername(principal.getName());
     }
 
-    @RequestMapping(path = "/account/users", method = RequestMethod.GET)
+    @RequestMapping(path = "/users", method = RequestMethod.GET)
     public List<User> getAllUsers(){
         return userDao.findAll();
     }
 
-    @RequestMapping(path = "/account/transfers/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/transfers/{userId}", method = RequestMethod.GET)
     public List<Transfer> getTransfersByUserId(@PathVariable int userId){
         return transfersDao.getTransfersByUserId(userId);
     }
 
-    @RequestMapping(path = "/account/transfers/{transferId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/transfers/{transferId}", method = RequestMethod.GET)
     public Transfer getTransfersByTransferId(@PathVariable int transferId){
         return transfersDao.getTransferByTransferId(transferId);
     }
@@ -49,7 +51,7 @@ public class AccountController {
         return accountDao.getAccountByAccountId(accountId);
     }
 
-    @RequestMapping(path = "/account/users/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/account/{userId}", method = RequestMethod.GET)
     public Account getAccountByUserId(@PathVariable int userId) {
         return accountDao.getAccountByUserId(userId);
     }

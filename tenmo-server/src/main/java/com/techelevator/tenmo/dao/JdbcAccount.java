@@ -6,9 +6,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
+
+
 @Component
 public class JdbcAccount implements AccountDao {
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+
+    public JdbcAccount (DataSource ds) {
+        this.jdbcTemplate = new JdbcTemplate(ds);
+    }
 
     @Override
     public Account getAccountByUserId(int userId) {
@@ -35,7 +43,7 @@ public class JdbcAccount implements AccountDao {
 
     @Override
     public Balance getBalanceByUsername(String username) {
-        String sql = "SELECT balance FROM accounts JOIN users ON accounts.user_id = users.user_id WHERE username = ?";
+        String sql = "SELECT balance FROM accounts JOIN users ON accounts.user_id = users.user_id WHERE username = ? ";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, username);
         Balance balance = new Balance();
         if(results.next()){

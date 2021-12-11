@@ -22,27 +22,26 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	private static final String MAIN_MENU_OPTION_LOGIN = "Login as different user";
 	private static final String[] MAIN_MENU_OPTIONS = { MAIN_MENU_OPTION_VIEW_BALANCE, MAIN_MENU_OPTION_SEND_BUCKS, MAIN_MENU_OPTION_VIEW_PAST_TRANSFERS, MAIN_MENU_OPTION_REQUEST_BUCKS, MAIN_MENU_OPTION_VIEW_PENDING_REQUESTS, MAIN_MENU_OPTION_LOGIN, MENU_OPTION_EXIT };
 
-	private AccountService accountService;
-	private TransferService transferService;
-	private TransferTypesServices transferTypesServices;
-	private TransferStatusService transferStatusService;
-    private AuthenticatedUser currentUser;
-    private ConsoleService console;
-    private AuthenticationService authenticationService;
+	public AccountService restAccountService;
+	public TransferService restTransferService;
+	public TransferTypeService restTransferTypesServices;
+	public TransferStatusService restTransferStatusService;
+	public AuthenticatedUser currentUser;
+	public ConsoleService console;
+	public AuthenticationService authenticationService;
 
-    public static void main(String[] args) {
-    	App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
-    	app.run();
-    }
+	public static void main(String[] args) {
+		App app = new App(new ConsoleService(System.in, System.out), new AuthenticationService(API_BASE_URL));
+		app.run();
+	}
 
-    public App(ConsoleService console, AuthenticationService authenticationService) {
+	public App(ConsoleService console, AuthenticationService authenticationService) {
 		this.console = console;
 		this.authenticationService = authenticationService;
-		this.accountService = new AccountService();
-		this.transferService = new TransferService();
-		this.transferStatusService = new TransferStatusService();
-		this.transferTypesServices = new TransferTypesServices();
-		this.currentUser = new AuthenticatedUser();
+		this.restAccountService = new AccountService();
+		this.restTransferService = new TransferService();
+		this.restTransferStatusService = new TransferStatusService();
+		this.restTransferTypesServices = new TransferTypeService();
 	}
 
 	public void run() {
@@ -77,11 +76,9 @@ private static final String API_BASE_URL = "http://localhost:8080/";
 	}
 
 	private void viewCurrentBalance() {
-    	Balance balance = accountService.getBalanceByUser(currentUser);
-    	System.out.println("Your current balance is: $" + balance);
+		Balance balance = restAccountService.getBalanceByUser(currentUser);
+		System.out.println("Your current balance is: $" + balance.getBalance());
 
-		// TODO Auto-generated method
-		
 	}
 
 	private void viewTransferHistory() {
