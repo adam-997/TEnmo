@@ -71,7 +71,7 @@ public class TransferService{
 
     public void createTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
         HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
-        restTemplate.exchange(baseUrl + "/transfers/" + transfer.getTransferId(), HttpMethod.POST, entity, Transfer.class);
+        restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.POST, entity, Transfer.class);
     }
 
 

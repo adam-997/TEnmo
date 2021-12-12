@@ -30,6 +30,12 @@ public class JdbcAccount implements AccountDao {
     }
 
     @Override
+    public void updateAccount(Account accountUpdated) {
+        String sql = "UPDATE accounts SET balance = ? WHERE account_id = ?;";
+        jdbcTemplate.update(sql, accountUpdated.getBalance(), accountUpdated.getAccountId());
+    }
+
+    @Override
     public Account getAccountByAccountId(int accountId) {
         String sql = "SELECT account_id, user_id, balance FROM accounts WHERE account_id = ?;";
         SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, accountId);

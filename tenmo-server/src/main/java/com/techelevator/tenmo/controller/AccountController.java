@@ -3,6 +3,7 @@ package com.techelevator.tenmo.controller;
 import com.techelevator.tenmo.dao.*;
 import com.techelevator.tenmo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -73,6 +74,19 @@ public class AccountController {
     @RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
     public List<Transfer> getAllPendingTransfers(@PathVariable int userId){
         return transfersDao.getPendingTransfersByUserId(userId);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(path = "/transfers/{id}", method = RequestMethod.POST)
+    public void createTransfer(@PathVariable int Id, @RequestBody Transfer transfer){
+       double amount = transfer.getAmount();
+       Account accountTo = accountDao.getAccountByAccountId(transfer.getAccountTo());
+       Account accountFrom = accountDao.getAccountByAccountId(transfer.getAccountFrom());
+       accountFrom.getBalance().transferFunds(amount);
+       accountTo.getBalance().receiveFunds(amount);
+       transfersDao.createTransfer(transfer);
+       accountDao.updateAccount(accountFrom);
+       accountDao.updateAccount(accountTo);
     }
 
 

@@ -30,6 +30,7 @@ public class Transfer {
         return transferTypeId;
     }
 
+
     public void setTransferTypeId(int transferTypeId) {
         this.transferTypeId = transferTypeId;
     }

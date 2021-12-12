@@ -25,7 +25,7 @@ You should attempt to complete all of the following required use cases.
 5. As an authenticated user of the system, I need to be able to see transfers I have sent or received.
 6. As an authenticated user of the system, I need to be able to retrieve the details of any transfer based upon the transfer ID.
 
-### Optional use cases
+
 
 If you complete all of the required use cases and are looking for additional challenge, complete as many of the following optional use cases as you can.
 
