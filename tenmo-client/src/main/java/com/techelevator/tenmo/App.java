@@ -4,7 +4,6 @@ import com.techelevator.tenmo.model.*;
 import com.techelevator.tenmo.services.*;
 import com.techelevator.view.ConsoleService;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class App {
@@ -190,16 +189,19 @@ public class App {
 	}
 
 	private boolean userIdChoice(int choice, User[] users, AuthenticatedUser currentUser) {
-		users = userService.getAllUsers(currentUser);
+
 		if (choice != 0) {
 				if(choice == currentUser.getUser().getId()) {
 					return false;
 				}
-				if(Arrays.asList(users).contains(userService.getUserByUserId(currentUser, choice))) {
+			for (User user: users) {
+				if (user.getId() == choice){
 					return true;
 				}
 
 			}
+
+		}
 		return false;
 
 }
@@ -218,19 +220,22 @@ public class App {
 		double transferAmount = Double.parseDouble(amount);
 		Transfer transfer = new Transfer();
 		transfer.setTransferId(getMaxIdPlusOne());
-		transfer.setAmount(transferAmount);
 		transfer.setTransferTypeId(transferTypeId);
 		transfer.setTransferStatusId(transferStatusId);
 		transfer.setAccountFrom(accountFromId);
 		transfer.setAccountTo(accountToId);
-		restTransferService.createTransfer(currentUser, transfer);
+		transfer.setAmount(transferAmount);
+
+		restTransferService.makeTransfer(currentUser, transfer);
 		return transfer;
 	}
+
+
 	private int getMaxID() {
 		int maxID = 0;
-		for (Transfer r : restTransferService.getAllTransfers(currentUser)) {
-			if (r.getTransferId() > maxID) {
-				maxID = r.getTransferId();
+		for (Transfer t : restTransferService.getAllTransfers(currentUser)) {
+			if (t.getTransferId() > maxID) {
+				maxID = t.getTransferId();
 			}
 		}
 		return maxID;
@@ -238,5 +243,4 @@ public class App {
 	private int getMaxIdPlusOne() {
 		return getMaxID() + 1;
 	}
-
 }

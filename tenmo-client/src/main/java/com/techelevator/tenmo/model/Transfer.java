@@ -8,20 +8,6 @@ public class Transfer {
     private int accountTo;
     private double amount;
 
-
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountFrom, int accountTo, double amount) {
-        this.transferId = transferId;
-        this.transferTypeId = transferTypeId;
-        this.transferStatusId = transferStatusId;
-        this.accountFrom = accountFrom;
-        this.accountTo = accountTo;
-        this.amount = amount;
-    }
-
-    public Transfer() {
-
-    }
-
     public int getTransferId() {
         return transferId;
     }

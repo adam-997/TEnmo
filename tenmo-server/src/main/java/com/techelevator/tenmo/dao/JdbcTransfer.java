@@ -5,16 +5,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 @Component
 
 public class JdbcTransfer implements TransfersDao {
-        private JdbcTemplate jdbcTemplate;
+        private final JdbcTemplate jdbcTemplate ;
+
+    public JdbcTransfer (DataSource ds) {
+        this.jdbcTemplate = new JdbcTemplate(ds);
+    }
 
         @Override
-        public void createTransfer (Transfer transfer){
-            String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (?, ?, ?, ?, ?) RETURNING transfer_id;";
+        public void makeTransfer(Transfer transfer){
+            String sql = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (?, ?, ?, ?, ?);";
             jdbcTemplate.update(sql, transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
 
         }

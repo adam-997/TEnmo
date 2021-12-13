@@ -5,14 +5,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
+
 
 @Component
 public class JdbcTransferStatuses implements TransferStatusesDao{
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate ;
 
-
+    public JdbcTransferStatuses (DataSource ds) {
+        this.jdbcTemplate = new JdbcTemplate(ds);
+    }
     @Override
-    public TransferStatuses getTransferByDesc(String description) {
+    public TransferStatuses getTransferStatusByDesc(String description) {
 
         String sql = "SELECT transfer_status_id, transfer_status_desc FROM transfer_statuses WHERE transfer_status_desc = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, description);

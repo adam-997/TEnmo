@@ -15,10 +15,10 @@ public class TransferStatusService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public TransferStatuses getTransferStatusByDesc (AuthenticatedUser authenticatedUser, String description) {
-        TransferStatuses transferStatuses = null;
+        TransferStatuses transferStatuses = new TransferStatuses();
         HttpEntity<TransferStatuses> entity = makeEntity(authenticatedUser);
         try {
-            transferStatuses = restTemplate.exchange(baseUrl + "transferstatus/filter?description=" + description, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
+            transferStatuses = restTemplate.exchange(baseUrl + "transferstatus/" + description, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
 
         } catch (
                 RestClientResponseException e) {
@@ -26,7 +26,7 @@ public class TransferStatusService {
         return transferStatuses;
     }
     public TransferStatuses getTransferStatusById (AuthenticatedUser authenticatedUser ,int transferStatusId) {
-        TransferStatuses transferStatuses = null;
+        TransferStatuses transferStatuses = new TransferStatuses();
         HttpEntity<TransferStatuses> entity = makeEntity(authenticatedUser);
         try {
             transferStatuses = restTemplate.exchange(baseUrl + "transferstatus/" + transferStatusId, HttpMethod.GET , entity ,TransferStatuses.class).getBody();

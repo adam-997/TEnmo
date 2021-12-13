@@ -17,7 +17,7 @@ public class TransferService{
 
 
     public Transfer getTransferByTransferId(AuthenticatedUser authenticatedUser, int transferId) {
-        HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeEntity(authenticatedUser);
         Transfer transfer = null;
         try {
             transfer = restTemplate.exchange(baseUrl + "transfers/" + transferId, HttpMethod.GET , entity ,Transfer.class).getBody();
@@ -29,7 +29,7 @@ public class TransferService{
 
     public Transfer[] getTransfersByUserId (AuthenticatedUser authenticatedUser, int userId) {
         Transfer[] transfer = null;
-        HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeEntity(authenticatedUser);
         try {
             transfer = restTemplate.exchange(baseUrl + "transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
         } catch (RestClientResponseException e) {
@@ -41,7 +41,7 @@ public class TransferService{
 
     public Transfer[] getAllTransfers (AuthenticatedUser authenticatedUser) {
         Transfer[] transfer = null;
-        HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeEntity(authenticatedUser);
         try {
             transfer = restTemplate.exchange(baseUrl + "transfers", HttpMethod.GET , entity ,Transfer[].class).getBody();
         } catch (RestClientResponseException e) {
@@ -52,7 +52,7 @@ public class TransferService{
 
     public Transfer[] getPendingTransfersByUserId ( AuthenticatedUser authenticatedUser, int userId){
         Transfer[] transfer = null;
-        HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeEntity(authenticatedUser);
         try {
             transfer = restTemplate.exchange(baseUrl + "transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
         } catch (RestClientResponseException e) {
@@ -64,19 +64,19 @@ public class TransferService{
 
 
     public void updateTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
-        HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeEntity(authenticatedUser);
         restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.PUT, entity, Transfer.class);
     }
 
 
-    public void createTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
-        HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
+    public void makeTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
+        HttpEntity entity = makeEntity(authenticatedUser);
         restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.POST, entity, Transfer.class);
     }
 
 
 
-    private HttpEntity<Transfer> makeEntity (AuthenticatedUser authenticatedUser){
+    private HttpEntity makeEntity (AuthenticatedUser authenticatedUser){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(authenticatedUser.getToken());
