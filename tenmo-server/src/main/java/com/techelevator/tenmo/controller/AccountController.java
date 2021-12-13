@@ -71,13 +71,13 @@ public class AccountController {
         return transferTypesDao.getTransferTypeById(transferId);
     }
 
-    @RequestMapping(path = "/transfertype/{desc}", method = RequestMethod.GET)
-    public TransferTypes getTransferTypeByDesc(@PathVariable String desc){
+    @RequestMapping(path = "/transfertype/filter", method = RequestMethod.GET)
+    public TransferTypes getTransferTypeByDesc(@RequestParam String desc){
         return transferTypesDao.getTransferTypeByDesc(desc);
     }
 
-    @RequestMapping(path = "/transferstatus/{desc}", method = RequestMethod.GET)
-    public TransferStatuses getTransferStatusByDesc(@PathVariable String desc){
+    @RequestMapping(path = "/transferstatus/filter", method = RequestMethod.GET)
+    public TransferStatuses getTransferStatusByDesc(@RequestParam String desc){
         return transferStatusesDao.getTransferStatusByDesc(desc);
     }
 

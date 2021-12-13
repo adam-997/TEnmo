@@ -210,7 +210,7 @@ public class App {
 		int transferStatusId = restTransferStatusService.getTransferStatusByDesc(currentUser, transferStatus).getTransferStatusId();
 		int accountFromId;
 		int accountToId;
-		if (Objects.equals(transferType, "Send")){
+		if (transferType.equals("Send")){
 	        accountToId = restAccountService.getAccountByUserId(currentUser, choice).getAccountId();
 			accountFromId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
 		} else{

@@ -64,13 +64,13 @@ public class TransferService{
 
 
     public void updateTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
-        HttpEntity entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeTransferEntity(authenticatedUser, transfer);
         restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.PUT, entity, Transfer.class);
     }
 
 
     public void makeTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
-        HttpEntity entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeTransferEntity(authenticatedUser, transfer);
         restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.POST, entity, Transfer.class);
     }
 
@@ -82,6 +82,13 @@ public class TransferService{
         headers.setBearerAuth(authenticatedUser.getToken());
 
         return new HttpEntity<>(headers);
+    }
+    private HttpEntity<Transfer> makeTransferEntity (AuthenticatedUser authenticatedUser, Transfer transfer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(authenticatedUser.getToken());
+        HttpEntity<Transfer> entity = new HttpEntity(transfer, headers);
+        return entity;
     }
 }
 

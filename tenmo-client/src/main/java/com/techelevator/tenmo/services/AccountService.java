@@ -35,7 +35,7 @@ public class AccountService {
 
 
     public Balance getBalanceByUser(AuthenticatedUser authenticatedUser) {
-        Balance balance = null;
+        Balance balance = new Balance();
         HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
             ResponseEntity<Balance> response = restTemplate.exchange(baseUrl + "account/balance" , HttpMethod.GET, entity, Balance.class);
