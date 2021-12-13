@@ -31,7 +31,7 @@ public class TransferService{
         Transfer[] transfer = null;
         HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
         try {
-            transfer = restTemplate.exchange(baseUrl + "transfers/user/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
+            transfer = restTemplate.exchange(baseUrl + "transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
 
@@ -54,7 +54,7 @@ public class TransferService{
         Transfer[] transfer = null;
         HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
         try {
-            transfer = restTemplate.exchange(baseUrl + "transfers", HttpMethod.GET , entity ,Transfer[].class).getBody();
+            transfer = restTemplate.exchange(baseUrl + "transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
 
@@ -65,7 +65,7 @@ public class TransferService{
 
     public void updateTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
         HttpEntity<Transfer> entity = makeEntity(authenticatedUser);
-        restTemplate.exchange(baseUrl + "/transfers/" + transfer.getTransferId(), HttpMethod.PUT, entity, Transfer.class);
+        restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.PUT, entity, Transfer.class);
     }
 
 

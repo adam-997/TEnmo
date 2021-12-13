@@ -37,6 +37,11 @@ public class AccountController {
         return userDao.findAll();
     }
 
+    @RequestMapping(path = "/users/{userId}", method = RequestMethod.GET)
+    public User getUserByUserId(@PathVariable int userId){
+        return userDao.getUserByUserId(userId);
+    }
+
     @RequestMapping(path = "/transfers/{userId}", method = RequestMethod.GET)
     public List<Transfer> getTransfersByUserId(@PathVariable int userId){
         return transfersDao.getTransfersByUserId(userId);
@@ -77,16 +82,25 @@ public class AccountController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @RequestMapping(path = "/transfers/{id}", method = RequestMethod.POST)
-    public void createTransfer(@PathVariable int Id, @RequestBody Transfer transfer){
-       double amount = transfer.getAmount();
-       Account accountTo = accountDao.getAccountByAccountId(transfer.getAccountTo());
-       Account accountFrom = accountDao.getAccountByAccountId(transfer.getAccountFrom());
-       accountFrom.getBalance().transferFunds(amount);
-       accountTo.getBalance().receiveFunds(amount);
-       transfersDao.createTransfer(transfer);
-       accountDao.updateAccount(accountFrom);
-       accountDao.updateAccount(accountTo);
+    @RequestMapping(path = "/transfers", method = RequestMethod.POST)
+    public void createTransfer(@RequestBody Transfer transfer){
+        if(transfer.getTransferStatusId() == transferStatusesDao.getTransferByDesc("Approved").getTransferStatusId()) {
+
+            double amountToTransfer = transfer.getAmount();
+            Account accountFrom = accountDao.getAccountByAccountId(transfer.getAccountFrom());
+            Account accountTo = accountDao.getAccountByAccountId(transfer.getAccountTo());
+
+            accountFrom.getBalance().transferFunds(amountToTransfer);
+            accountTo.getBalance().receiveFunds(amountToTransfer);
+
+            transfersDao.createTransfer(transfer);
+
+            accountDao.updateAccount(accountFrom);
+            accountDao.updateAccount(accountTo);
+        } else {
+            transfersDao.updateTransfer(transfer);
+        }
+
     }
 
 

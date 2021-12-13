@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 public class UserService {
 
     private RestTemplate restTemplate;
-    private String baseUrl = "http//localhost:8080/";
+    private String baseUrl = "http://localhost:8080/";
 
     public UserService(){
         this.restTemplate = new RestTemplate();
@@ -22,7 +22,7 @@ public class UserService {
 
     public User[] getAllUsers(AuthenticatedUser authenticatedUser){
         User[] users = null;
-        HttpEntity<User> entity = makeAuthEntity(authenticatedUser);
+        HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
             users = restTemplate.exchange(baseUrl + "users", HttpMethod.GET , entity ,User[].class).getBody();
         } catch (RestClientResponseException e) {
@@ -33,9 +33,9 @@ public class UserService {
 
     public User getUserByUserId (AuthenticatedUser authenticatedUser, int userId){
         User user = null;
-        HttpEntity<User> entity = makeAuthEntity(authenticatedUser);
+        HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
-            user = restTemplate.exchange(baseUrl + "user", HttpMethod.GET , entity , User.class).getBody();
+            user = restTemplate.exchange(baseUrl + "users/" + userId, HttpMethod.GET , entity , User.class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
 

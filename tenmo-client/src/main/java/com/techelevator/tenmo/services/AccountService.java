@@ -33,6 +33,7 @@ public class AccountService {
         return account;
     }
 
+
     public Balance getBalanceByUser(AuthenticatedUser authenticatedUser) {
         Balance balance = null;
         HttpEntity entity = makeAuthEntity(authenticatedUser);

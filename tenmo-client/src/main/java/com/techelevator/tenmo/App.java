@@ -5,6 +5,7 @@ import com.techelevator.tenmo.services.*;
 import com.techelevator.view.ConsoleService;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class App {
 
@@ -110,12 +111,14 @@ public class App {
 		System.out.println("ID	Name");
 		System.out.println("---------------------------------------------------");
 		User[] users = userService.getAllUsers(currentUser);
+		for (User user : users) {
+			System.out.println(user.getId() + "     " + user.getUsername());
+		}
 		int choice = console.getUserInputInteger("Enter user id of the person you would like to transfer money to: ");
-		if (userIdChoice(choice, users, currentUser)) {
+			if (userIdChoice(choice, users, currentUser)) {
+
 				String amount = console.getUserInput("Please enter the amount you would like to transfer: ");
-			makeTransfer(choice, amount, "Send", "Approved");
-
-
+				makeTransfer(choice, amount, "Send", "Approved");
 		}
 		// TODO Auto-generated method stub
 
@@ -187,42 +190,39 @@ public class App {
 	}
 
 	private boolean userIdChoice(int choice, User[] users, AuthenticatedUser currentUser) {
-
+		users = userService.getAllUsers(currentUser);
 		if (choice != 0) {
-			for (User user : users) {
 				if(choice == currentUser.getUser().getId()) {
 					return false;
 				}
-				if(user == userService.getUserByUserId(currentUser, choice)) {
+				if(Arrays.asList(users).contains(userService.getUserByUserId(currentUser, choice))) {
 					return true;
 				}
 
 			}
-
-		}
 		return false;
-	}
 
+}
 	private Transfer makeTransfer(int choice, String amount, String transferType, String transferStatus) {
 		int transferTypeId = restTransferTypesServices.getTransferTypeByDesc(currentUser, transferType).getTransferTypeId();
 		int transferStatusId = restTransferStatusService.getTransferStatusByDesc(currentUser, transferStatus).getTransferStatusId();
 		int accountFromId;
 		int accountToId;
-		if (transferType == "Send"){
-			accountToId = restAccountService.getAccountByUserId(currentUser, choice).getUserId();
+		if (Objects.equals(transferType, "Send")){
+	        accountToId = restAccountService.getAccountByUserId(currentUser, choice).getAccountId();
 			accountFromId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
-
 		} else{
 			accountToId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
 			accountFromId = restAccountService.getAccountByUserId(currentUser, choice).getUserId();
 		}
-         Transfer transfer = null;
+		double transferAmount = Double.parseDouble(amount);
+		Transfer transfer = new Transfer();
 		transfer.setTransferId(getMaxIdPlusOne());
+		transfer.setAmount(transferAmount);
 		transfer.setTransferTypeId(transferTypeId);
 		transfer.setTransferStatusId(transferStatusId);
 		transfer.setAccountFrom(accountFromId);
 		transfer.setAccountTo(accountToId);
-		double transferAmount = Double.parseDouble(amount);
 		restTransferService.createTransfer(currentUser, transfer);
 		return transfer;
 	}

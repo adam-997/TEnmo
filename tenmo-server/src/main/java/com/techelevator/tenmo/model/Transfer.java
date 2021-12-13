@@ -1,5 +1,9 @@
 package com.techelevator.tenmo.model;
 
+import com.techelevator.tenmo.dao.TransferTypesDao;
+import com.techelevator.tenmo.dao.TransfersDao;
+import org.springframework.web.client.RestTemplate;
+
 public class Transfer {
 
     private int transferId;
@@ -66,4 +70,6 @@ public class Transfer {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+
 }

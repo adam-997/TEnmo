@@ -8,21 +8,6 @@ public interface TransfersDao {
 
     void createTransfer(Transfer transfer);
 
-
-
-    private int getMaxID() {
-        int maxID = 0;
-        for (Transfer r : getAllTransfers()) {
-            if (r.getTransferId() > maxID) {
-                maxID = r.getTransferId();
-            }
-        }
-        return maxID;
-    }
-    private int getMaxIdPlusOne() {
-        return getMaxID() + 1;
-    }
-
     void updateTransfer(Transfer transfer);
 
     Transfer getTransferByTransferId(int transferId);
@@ -33,6 +18,19 @@ public interface TransfersDao {
 
     List<Transfer> getPendingTransfersByUserId(int userId);
 
+   // private int getMaxID() {
+    //    int maxID = 0;
+  //      for (Transfer r : getAllTransfers()) {
+    //        if (r.getTransferId() > maxID) {
+   //             maxID = r.getTransferId();
+        //    }
+//   }
+   //     return maxID;
+   // }
+   // private int getMaxIdPlusOne() {
+   //     return getMaxID() + 1;
+    }
 
 
-}
+
+//}
