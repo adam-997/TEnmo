@@ -56,7 +56,7 @@ public class AccountController {
         return accountDao.getAccountByAccountId(accountId);
     }
 
-    @RequestMapping(path = "/account/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/account/user/{userId}", method = RequestMethod.GET)
     public Account getAccountByUserId(@PathVariable int userId) {
         return accountDao.getAccountByUserId(userId);
     }
@@ -86,20 +86,20 @@ public class AccountController {
         return transferStatusesDao.getTransferStatusById(transferStatusId);
     }
 
-    @RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
-    public List<Transfer> getAllPendingTransfers(@PathVariable int userId){
-        return transfersDao.getPendingTransfersByUserId(userId);
-    }
+//    @RequestMapping(path = "/transfers/{id}", method = RequestMethod.GET)
+//    public List<Transfer> getAllPendingTransfers(@PathVariable int userId){
+//        return transfersDao.getPendingTransfersByUserId(userId);
+//    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/transfers/{id}", method = RequestMethod.POST)
     public void makeTransfer(@RequestBody Transfer transfer, @PathVariable int id){
-        double amountToTransfer = transfer.getAmount();
+        double amount= transfer.getAmount();
         Account accountFrom = accountDao.getAccountByAccountId(transfer.getAccountFrom());
         Account accountTo = accountDao.getAccountByAccountId(transfer.getAccountTo());
 
-        accountFrom.getBalance().transferFunds(amountToTransfer);
-        accountTo.getBalance().receiveFunds(amountToTransfer);
+        accountFrom.getBalance().transferFunds(amount);
+        accountTo.getBalance().receiveFunds(amount);
 
         transfersDao.makeTransfer(transfer);
 

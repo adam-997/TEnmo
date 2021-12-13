@@ -18,16 +18,16 @@ public class AccountService {
         Account account = new Account();
         HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
-            account = restTemplate.exchange(baseUrl + "account/user/" + userId, HttpMethod.GET , entity , Account.class).getBody();
+            account = restTemplate.exchange(baseUrl + "/account/user/" + userId, HttpMethod.GET , entity , Account.class).getBody();
         } catch (RestClientResponseException e) {
         }
         return account;
     }
-    public Account getAccountById(AuthenticatedUser authenticatedUser, int accountId) {
+    public Account getAccountByAccountId(AuthenticatedUser authenticatedUser, int accountId) {
         Account account = new Account();
         HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
-            account = restTemplate.exchange(baseUrl + "account/" + accountId + accountId, HttpMethod.GET , entity , Account.class).getBody();
+            account = restTemplate.exchange(baseUrl + "/account/" + accountId, HttpMethod.GET , entity , Account.class).getBody();
         } catch (RestClientResponseException e) {
         }
         return account;
@@ -38,7 +38,7 @@ public class AccountService {
         Balance balance = new Balance();
         HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
-            ResponseEntity<Balance> response = restTemplate.exchange(baseUrl + "account/balance" , HttpMethod.GET, entity, Balance.class);
+            ResponseEntity<Balance> response = restTemplate.exchange(baseUrl + "/account/balance" , HttpMethod.GET, entity, Balance.class);
             balance = response.getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Request unsuccessful. Code: " + e.getRawStatusCode());

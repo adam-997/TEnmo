@@ -215,11 +215,11 @@ public class App {
 			accountFromId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
 		} else{
 			accountToId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
-			accountFromId = restAccountService.getAccountByUserId(currentUser, choice).getUserId();
+			accountFromId = restAccountService.getAccountByUserId(currentUser, choice).getAccountId();
 		}
 		double transferAmount = Double.parseDouble(amount);
 		Transfer transfer = new Transfer();
-		transfer.setTransferId(getMaxIdPlusOne());
+//		transfer.setTransferId(getMaxIdPlusOne());
 		transfer.setTransferTypeId(transferTypeId);
 		transfer.setTransferStatusId(transferStatusId);
 		transfer.setAccountFrom(accountFromId);

@@ -16,9 +16,9 @@ public class TransferStatusService {
 
     public TransferStatuses getTransferStatusByDesc (AuthenticatedUser authenticatedUser, String description) {
         TransferStatuses transferStatuses = new TransferStatuses();
-        HttpEntity<TransferStatuses> entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transferStatuses = restTemplate.exchange(baseUrl + "transferstatus/" + description, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
+            transferStatuses = restTemplate.exchange(baseUrl + "/transferstatus/filter?description=" + description, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
 
         } catch (
                 RestClientResponseException e) {
@@ -27,16 +27,16 @@ public class TransferStatusService {
     }
     public TransferStatuses getTransferStatusById (AuthenticatedUser authenticatedUser ,int transferStatusId) {
         TransferStatuses transferStatuses = new TransferStatuses();
-        HttpEntity<TransferStatuses> entity = makeEntity(authenticatedUser);
+        HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transferStatuses = restTemplate.exchange(baseUrl + "transferstatus/" + transferStatusId, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
+            transferStatuses = restTemplate.exchange(baseUrl + "/transferstatus/" + transferStatusId, HttpMethod.GET , entity ,TransferStatuses.class).getBody();
         } catch (
                 RestClientResponseException e) {
         }
         return transferStatuses;
     }
 
-    private HttpEntity<TransferStatuses>  makeEntity (AuthenticatedUser authenticatedUser){
+    private HttpEntity  makeEntity (AuthenticatedUser authenticatedUser){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(authenticatedUser.getToken());

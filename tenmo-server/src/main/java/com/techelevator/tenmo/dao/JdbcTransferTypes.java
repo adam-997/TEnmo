@@ -1,6 +1,5 @@
 package com.techelevator.tenmo.dao;
 
-import com.techelevator.tenmo.model.TransferStatuses;
 import com.techelevator.tenmo.model.TransferTypes;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -10,7 +9,6 @@ import javax.sql.DataSource;
 
 
 @Component
-
 public class JdbcTransferTypes implements TransferTypesDao {
     private final JdbcTemplate jdbcTemplate ;
 
@@ -19,7 +17,8 @@ public class JdbcTransferTypes implements TransferTypesDao {
     }
     @Override
     public TransferTypes getTransferTypeByDesc(String description) {
-        String sql = "SELECT transfer_type_id, transfer_type_desc FROM transfer_types WHERE transfer_type_desc = ?;";
+
+        String sql = "SELECT * FROM transfer_types WHERE transfer_type_desc = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, description);
         TransferTypes transferTypes = null;
         if(results.next()) {
@@ -31,7 +30,7 @@ public class JdbcTransferTypes implements TransferTypesDao {
 
     @Override
     public TransferTypes getTransferTypeById(int transferId) {
-        String sql = "SELECT transfer_type_id, transfer_type_desc FROM transfer_types WHERE transfer_type_id = ?;";
+        String sql = "SELECT * FROM transfer_types WHERE transfer_type_id = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferId);
         TransferTypes transferTypes = null;
         if(results.next()) {
@@ -43,8 +42,8 @@ public class JdbcTransferTypes implements TransferTypesDao {
 
 
     private TransferTypes mapRowToTransferTypes(SqlRowSet rowSet){
-        int transferTypeId = rowSet.getInt("transferTypeId");
-        String transferTypeDesc = rowSet.getString("transferTypeDesc");
+        int transferTypeId = rowSet.getInt("transfer_type_id");
+        String transferTypeDesc = rowSet.getString("transfer_type_desc");
 
         return new TransferTypes(transferTypeId, transferTypeDesc);
     }

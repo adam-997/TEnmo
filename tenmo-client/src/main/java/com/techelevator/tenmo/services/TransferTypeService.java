@@ -20,7 +20,7 @@ public class TransferTypeService {
         TransferTypes transferTypes = new TransferTypes();
         HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transferTypes = restTemplate.exchange(baseUrl + "transfertype/" + description, HttpMethod.GET , entity ,TransferTypes.class).getBody();
+            transferTypes = restTemplate.exchange(baseUrl + "/transfertype/filter?description=" + description, HttpMethod.GET , entity ,TransferTypes.class).getBody();
 
         } catch (RestClientResponseException e) {
             System.out.println(e.getRawStatusCode());
@@ -32,11 +32,11 @@ public class TransferTypeService {
     }
 
 
-    public TransferTypes getTransferDescById (AuthenticatedUser authenticatedUser, int transferId ) {
+    public TransferTypes getTransferTypeById (AuthenticatedUser authenticatedUser, int transferId ) {
         TransferTypes transferTypes = new TransferTypes();
         HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transferTypes = restTemplate.exchange(baseUrl + "transfertype/" + transferId, HttpMethod.GET , entity ,TransferTypes.class).getBody();
+            transferTypes = restTemplate.exchange(baseUrl + "/transfertype/" + transferId, HttpMethod.GET , entity ,TransferTypes.class).getBody();
         } catch (
                 RestClientResponseException e) {
         }

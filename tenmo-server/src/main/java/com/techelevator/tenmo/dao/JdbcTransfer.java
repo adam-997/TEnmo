@@ -6,10 +6,11 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-@Component
 
+@Component
 public class JdbcTransfer implements TransfersDao {
         private final JdbcTemplate jdbcTemplate ;
 
@@ -19,14 +20,15 @@ public class JdbcTransfer implements TransfersDao {
 
         @Override
         public void makeTransfer(Transfer transfer){
-            String sql = "INSERT INTO transfers (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (DEFAULT, ?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO transfers (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount)" +
+                    " VALUES (DEFAULT, ?, ?, ?, ?, ? );";
             jdbcTemplate.update(sql, transfer.getTransferTypeId(), transfer.getTransferStatusId(), transfer.getAccountFrom(), transfer.getAccountTo(), transfer.getAmount());
 
         }
 
         @Override
         public List<Transfer> getTransfersByUserId ( int userId){
-            String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+            String sql = "SELECT * " +
                     "FROM transfers " +
                     "JOIN accounts ON accounts.account_id = transfers.account_from OR accounts.account_id = transfers.account_to " +
                     "WHERE user_id = ?";
@@ -43,7 +45,7 @@ public class JdbcTransfer implements TransfersDao {
 
     @Override
         public Transfer getTransferByTransferId ( int transferId){
-            String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+            String sql = "SELECT * " +
                     "FROM transfers WHERE transfer_id = ?";
             SqlRowSet result = jdbcTemplate.queryForRowSet(sql, transferId);
             Transfer transfer = null;
@@ -57,7 +59,7 @@ public class JdbcTransfer implements TransfersDao {
 
         @Override
         public List<Transfer> getAllTransfers () {
-            String sql = "SELECT transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount " +
+            String sql = "SELECT * " +
                     "FROM transfers";
 
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
@@ -101,9 +103,9 @@ public class JdbcTransfer implements TransfersDao {
             int transferStatusId = result.getInt("transfer_status_id");
             int accountFrom = result.getInt("account_from");
             int accountTo = result.getInt("account_to");
-            String amountDouble = result.getString("amount");
+            double amountDouble = result.getDouble("amount");
 
-            return new Transfer(transferId, transferTypeId, transferStatusId, accountFrom, accountTo, Double.parseDouble(amountDouble));
+            return new Transfer(transferId, transferTypeId, transferStatusId, accountFrom, accountTo,amountDouble);
         }
     }
 

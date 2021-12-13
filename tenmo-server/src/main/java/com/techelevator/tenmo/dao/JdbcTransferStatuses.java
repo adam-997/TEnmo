@@ -17,10 +17,10 @@ public class JdbcTransferStatuses implements TransferStatusesDao{
     }
     @Override
     public TransferStatuses getTransferStatusByDesc(String description) {
-
-        String sql = "SELECT transfer_status_id, transfer_status_desc FROM transfer_statuses WHERE transfer_status_desc = ?;";
+        TransferStatuses transferStatuses = new TransferStatuses();
+        String sql = "SELECT * FROM transfer_statuses WHERE transfer_status_desc = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, description);
-        TransferStatuses transferStatuses = null;
+
         if(results.next()) {
             transferStatuses = mapRowToTransferStatuses(results);
         }
@@ -30,9 +30,9 @@ public class JdbcTransferStatuses implements TransferStatusesDao{
 
     @Override
     public TransferStatuses getTransferStatusById(int transferStatusId) {
-        String sql = "SELECT transfer_status_id, transfer_status_desc FROM transfer_statuses WHERE transfer_status_id = ?;";
+        String sql = "SELECT * FROM transfer_statuses WHERE transfer_status_id = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferStatusId);
-        TransferStatuses transferStatuses = null;
+        TransferStatuses transferStatuses = new TransferStatuses();
         if(results.next()) {
             transferStatuses = mapRowToTransferStatuses(results);
         }
@@ -41,8 +41,8 @@ public class JdbcTransferStatuses implements TransferStatusesDao{
     }
 
     private TransferStatuses mapRowToTransferStatuses(SqlRowSet rowSet){
-        int transferStatusId = rowSet.getInt("transferStatusId");
-        String transferStatusDesc = rowSet.getString("transferStatusDesc");
+        int transferStatusId = rowSet.getInt("transfer_status_id");
+        String transferStatusDesc = rowSet.getString("transfer_status_desc");
 
         return new TransferStatuses(transferStatusId, transferStatusDesc);
     }

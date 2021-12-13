@@ -20,7 +20,7 @@ public class TransferService{
         HttpEntity entity = makeEntity(authenticatedUser);
         Transfer transfer = null;
         try {
-            transfer = restTemplate.exchange(baseUrl + "transfers/" + transferId, HttpMethod.GET , entity ,Transfer.class).getBody();
+            transfer = restTemplate.exchange(baseUrl + "/transfers/" + transferId, HttpMethod.GET , entity ,Transfer.class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
         }
@@ -31,7 +31,7 @@ public class TransferService{
         Transfer[] transfer = null;
         HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transfer = restTemplate.exchange(baseUrl + "transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
+            transfer = restTemplate.exchange(baseUrl + "/transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
 
@@ -43,35 +43,35 @@ public class TransferService{
         Transfer[] transfer = null;
         HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transfer = restTemplate.exchange(baseUrl + "transfers", HttpMethod.GET , entity ,Transfer[].class).getBody();
+            transfer = restTemplate.exchange(baseUrl + "/transfers", HttpMethod.GET , entity ,Transfer[].class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
         }
         return transfer;
     }
 
-    public Transfer[] getPendingTransfersByUserId ( AuthenticatedUser authenticatedUser, int userId){
-        Transfer[] transfer = null;
-        HttpEntity entity = makeEntity(authenticatedUser);
-        try {
-            transfer = restTemplate.exchange(baseUrl + "transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
-        } catch (RestClientResponseException e) {
-            System.out.println("Server network issue. Error code: " + e);
-
-        }
-        return transfer;
-    }
+//    public Transfer[] getPendingTransfersByUserId ( AuthenticatedUser authenticatedUser, int userId){
+//        Transfer[] transfer = null;
+//        HttpEntity entity = makeEntity(authenticatedUser);
+//        try {
+//            transfer = restTemplate.exchange(baseUrl + "/transfers/" + userId, HttpMethod.GET , entity ,Transfer[].class).getBody();
+//        } catch (RestClientResponseException e) {
+//            System.out.println("Server network issue. Error code: " + e);
+//
+//        }
+//        return transfer;
+//    }
 
 
     public void updateTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
         HttpEntity entity = makeTransferEntity(authenticatedUser, transfer);
-        restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.PUT, entity, Transfer.class);
+        restTemplate.exchange(baseUrl + "/transfers/" + transfer.getTransferId(), HttpMethod.PUT, entity, Transfer.class);
     }
 
 
     public void makeTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
         HttpEntity entity = makeTransferEntity(authenticatedUser, transfer);
-        restTemplate.exchange(baseUrl + "transfers/" + transfer.getTransferId(), HttpMethod.POST, entity, Transfer.class);
+        restTemplate.exchange(baseUrl + "/transfers/" + transfer.getTransferId(), HttpMethod.POST, entity, Transfer.class);
     }
 
 

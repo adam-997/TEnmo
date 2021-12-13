@@ -23,7 +23,7 @@ public class UserService {
         User[] users = null;
         HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
-            users = restTemplate.exchange(baseUrl + "users", HttpMethod.GET , entity ,User[].class).getBody();
+            users = restTemplate.exchange(baseUrl + "/users", HttpMethod.GET , entity ,User[].class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
         }
@@ -34,7 +34,7 @@ public class UserService {
         User user = null;
         HttpEntity entity = makeAuthEntity(authenticatedUser);
         try {
-            user = restTemplate.exchange(baseUrl + "users/" + userId, HttpMethod.GET , entity , User.class).getBody();
+            user = restTemplate.exchange(baseUrl + "/users/" + userId, HttpMethod.GET , entity , User.class).getBody();
         } catch (RestClientResponseException e) {
             System.out.println("Server network issue. Error code: " + e);
 

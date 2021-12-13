@@ -11,6 +11,7 @@ public interface AccountDao {
 
     Balance getBalanceByUsername(String username);
 
+
     void updateAccount(Account accountUpdated);
 
 

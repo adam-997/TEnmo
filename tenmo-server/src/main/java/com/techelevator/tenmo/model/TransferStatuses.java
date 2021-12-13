@@ -10,6 +10,10 @@ public class TransferStatuses {
         this.description = description;
     }
 
+    public TransferStatuses() {
+
+    }
+
     public int getTransferStatusId() {
         return transferStatusId;
     }

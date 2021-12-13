@@ -11,15 +11,4 @@ public class Balance {
         this.balance = balance;
     }
 
-    public void transferFunds(double amount){
-        double newBalance = balance - amount;
-        if(balance > newBalance) {
-            this.balance = newBalance;
-        }
-    }
-
-    public void receiveFunds(double amount) {
-        this.balance = balance + amount;
-    }
-
 }
