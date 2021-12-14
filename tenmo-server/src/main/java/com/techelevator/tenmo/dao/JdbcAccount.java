@@ -32,7 +32,7 @@ public class JdbcAccount implements AccountDao {
     @Override
     public void updateAccount(Account accountUpdated) {
         String sql = "UPDATE accounts SET balance = ? WHERE account_id = ?;";
-        jdbcTemplate.update(sql, accountUpdated.getBalance(), accountUpdated.getAccountId());
+        jdbcTemplate.update(sql, accountUpdated.getBalance().getBalance(), accountUpdated.getAccountId());
     }
 
     @Override

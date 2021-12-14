@@ -206,8 +206,8 @@ public class App {
 
 }
 	private Transfer makeTransfer(int choice, String amount, String transferType, String transferStatus) {
-		int transferTypeId = restTransferTypesServices.getTransferTypeByDesc(currentUser, transferType).getTransferTypeId();
-		int transferStatusId = restTransferStatusService.getTransferStatusByDesc(currentUser, transferStatus).getTransferStatusId();
+		int transferTypeId = restTransferTypesServices.getTransferType(currentUser, transferType).getTransferTypeId();
+		int transferStatusId = restTransferStatusService.getTransferStatus(currentUser, transferStatus).getTransferStatusId();
 		int accountFromId;
 		int accountToId;
 		if (transferType.equals("Send")){

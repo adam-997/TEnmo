@@ -1,53 +1,55 @@
 package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.TransferTypes;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 public class TransferTypeService {
+
     private final String baseUrl = "http://localhost:8080/";
+    private RestTemplate restTemplate = new RestTemplate();
 
-    private final RestTemplate restTemplate = new RestTemplate();
 
+    public TransferTypes getTransferType(AuthenticatedUser authenticatedUser, String description) {
+        TransferTypes transferType = new TransferTypes();
 
-    public TransferTypes getTransferTypeByDesc (AuthenticatedUser authenticatedUser, String description) {
-        TransferTypes transferTypes = new TransferTypes();
-        HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transferTypes = restTemplate.exchange(baseUrl + "/transfertype/filter?description=" + description, HttpMethod.GET , entity ,TransferTypes.class).getBody();
-
-        } catch (RestClientResponseException e) {
-            System.out.println(e.getRawStatusCode());
-        } catch (ResourceAccessException e){
-            System.out.println(e.getMessage());
-
+            String url = baseUrl + "/transfertype/filter?description=" + description;
+            transferType = restTemplate.exchange(url, HttpMethod.GET, makeEntity(authenticatedUser), TransferTypes.class).getBody();
+        } catch(RestClientResponseException e) {
+            System.out.println("Could not complete request. Code: " + e.getRawStatusCode());
+        } catch(ResourceAccessException e) {
+            System.out.println("Could not complete request due to server network issue. Please try again.");
         }
-        return transferTypes;
+        return transferType;
     }
 
+    public TransferTypes getTransferTypeFromId(AuthenticatedUser authenticatedUser, int transferTypeId) {
+        TransferTypes transferType = new TransferTypes();
 
-    public TransferTypes getTransferTypeById (AuthenticatedUser authenticatedUser, int transferId ) {
-        TransferTypes transferTypes = new TransferTypes();
-        HttpEntity entity = makeEntity(authenticatedUser);
         try {
-            transferTypes = restTemplate.exchange(baseUrl + "/transfertype/" + transferId, HttpMethod.GET , entity ,TransferTypes.class).getBody();
-        } catch (
-                RestClientResponseException e) {
+            String url = baseUrl + "/transfertype/" + transferTypeId;
+            transferType = restTemplate.exchange(url, HttpMethod.GET, makeEntity(authenticatedUser), TransferTypes.class).getBody();
+        } catch(RestClientResponseException e) {
+            System.out.println("Could not complete request. Code: " + e.getRawStatusCode());
+        } catch(ResourceAccessException e) {
+            System.out.println("Could not complete request due to server network issue. Please try again.");
         }
-        return transferTypes;
+
+
+        return transferType;
     }
 
-    private HttpEntity  makeEntity (AuthenticatedUser authenticatedUser){
+    private HttpEntity makeEntity(AuthenticatedUser authenticatedUser) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(authenticatedUser.getToken());
-
-        return new HttpEntity<>(headers);
+        HttpEntity entity = new HttpEntity(headers);
+        return entity;
     }
 }
