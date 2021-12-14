@@ -22,7 +22,7 @@ public class JdbcAccount implements AccountDao {
     public Account getAccountByUserId(int userId) {
         String sql = "SELECT * FROM accounts WHERE user_id = ?;";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
-        Account account = null;
+        Account account = new Account();
         if(results.next()){
             account = mapRowToAccount(results);
         }

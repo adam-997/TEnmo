@@ -92,7 +92,7 @@ public class App {
 
 		int currentUserAccountId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
 		for(Transfer transfer: transfers) {
-			System.out.println(transfer.getTransferId());
+			printTransferDetail(currentUser ,transfer);
 		}
 
 		int transferIdChoice = console.getUserInputInteger("\nPlease enter transfer ID to view details (0 to cancel)");
@@ -269,6 +269,22 @@ public class App {
 		}
 		return transferChoice;
 	}
+private void printTransferDetail(AuthenticatedUser authenticatedUser, Transfer transfer){
+		String fromTo;
+		int accountFrom = transfer.getAccountFrom();
+		int accountTo = transfer.getAccountTo();
+		if (restAccountService.getAccountByAccountId(currentUser, accountTo).getUserId() == authenticatedUser.getUser().getId()){
+			int accountFromUserId = restAccountService.getAccountByAccountId(currentUser, accountFrom).getUserId();
+			String userFromName = userService.getUserByUserId(currentUser, accountFromUserId).getUsername();
+			fromTo = "From: " + userFromName;
+		} else {
+				int userId = restAccountService.getAccountByUserId(currentUser, accountTo).getUserId();
+				String userToName = userService.getUserByUserId(currentUser, userId).getUsername();
+				fromTo = "To: " + userToName;
+		}
+	System.out.println(transfer.getTransferId() + "     " + fromTo + "     " + "$ " + transfer.getAmount());
+}
+
 
 	private void printTransferDetails(AuthenticatedUser currentUser, Transfer transferChoice) {
 		int id = transferChoice.getTransferId();

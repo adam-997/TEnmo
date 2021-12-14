@@ -83,13 +83,13 @@ public class ConsoleService {
 		out.flush();
 	}
 
-	public void printTransferDetails(int id, String from, String to, String type, String status, double amount) {
+	public void printTransferDetails(int id, String fromUserName, String toUserName, String type, String status, double amount) {
 		out.println("-------------------------------");
 		out.println("Transfer Details");
 		out.println("-------------------------------");
 		out.println("Id: " + id);
-		out.println("From: " + from);
-		out.println("To: " + to);
+		out.println("From: " + fromUserName);
+		out.println("To: " + toUserName);
 		out.println("Type: " + type);
 		out.println("Status: " + status);
 		out.println("Amount: $" + amount);

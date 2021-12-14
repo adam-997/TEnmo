@@ -36,7 +36,7 @@ public class AccountController {
         return userDao.findAll();
     }
 
-    @RequestMapping(path = "/users/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/users/userid/{userId}", method = RequestMethod.GET)
     public User getUserByUserId(@PathVariable int userId){
         return userDao.getUserByUserId(userId);
     }
@@ -61,7 +61,7 @@ public class AccountController {
         return accountDao.getAccountByUserId(userId);
     }
 
-    @RequestMapping(path = "/user/{username}", method = RequestMethod.GET)
+    @RequestMapping(path = "/users/{username}", method = RequestMethod.GET)
     public User getUserByUsername(@PathVariable String username){
         return userDao.findByUsername(username);
     }
