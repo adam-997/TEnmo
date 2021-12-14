@@ -1,5 +1,7 @@
 package com.techelevator.tenmo.model;
 
+import com.techelevator.tenmo.exceptions.InsufficientFunds;
+
 public class Balance {
 
     private double balance;
@@ -12,10 +14,13 @@ public class Balance {
         this.balance = balance;
     }
 
-    public void transferFunds(double amount){
+    public void transferFunds(double amount) throws InsufficientFunds {
         double newBalance = balance - amount;
         if(balance > newBalance) {
             this.balance = newBalance;
+        }
+        else {
+            throw new InsufficientFunds();
         }
     }
 

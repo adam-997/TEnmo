@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
@@ -71,9 +72,16 @@ public class TransferService{
 
     public void makeTransfer(AuthenticatedUser authenticatedUser, Transfer transfer) {
         HttpEntity entity = makeTransferEntity(authenticatedUser, transfer);
+        try {
         restTemplate.exchange(baseUrl + "/transfers/" + transfer.getTransferId(), HttpMethod.POST, entity, Transfer.class);
     }
-
+        catch (RestClientResponseException e){
+            System.out.println(e.getMessage());
+        }
+        catch (ResourceAccessException e){
+            System.out.println("Server Network Issue.");
+        }
+    }
 
 
     private HttpEntity makeEntity (AuthenticatedUser authenticatedUser){

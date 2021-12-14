@@ -1,5 +1,8 @@
 package com.techelevator.tenmo;
 
+import com.techelevator.tenmo.exceptions.TransferIdException;
+import com.techelevator.tenmo.exceptions.UserChoiceException;
+import com.techelevator.tenmo.exceptions.UserNotFoundException;
 import com.techelevator.tenmo.model.*;
 import com.techelevator.tenmo.services.*;
 import com.techelevator.view.ConsoleService;
@@ -93,7 +96,7 @@ public class App {
 			printTransferDetail(currentUser ,transfer);
 		}
 
-		int transferIdChoice = console.getUserInputInteger("\nPlease enter transfer ID to view details (0 to cancel)");
+		int transferIdChoice = console.getUserInputInteger("\nPlease enter transfer ID to view details");
 		Transfer transferChoice = validateTransferIdChoice(transferIdChoice, transfers, currentUser);
 		if(transferChoice != null) {
 			printTransferDetails(currentUser, transferChoice);
@@ -207,21 +210,29 @@ public class App {
 
 	private boolean userIdChoice(int choice, User[] users, AuthenticatedUser currentUser) {
 
-		if (choice != 0) {
-				if(choice == currentUser.getUser().getId()) {
-					return false;
-				}
-			for (User user: users) {
-				if (user.getId() == choice){
-					return true;
-				}
+		if(choice != 0) {
+			try {
+				boolean validUserIdChoice = false;
 
+				for (User user : users) {
+					if(choice == currentUser.getUser().getId()) {
+						throw new UserChoiceException();
+					}
+					if (user.getId() == choice) {
+						validUserIdChoice = true;
+						break;
+					}
+				}
+				if (validUserIdChoice == false) {
+					throw new UserNotFoundException();
+				}
+				return true;
+			} catch (UserChoiceException | UserNotFoundException e) {
+				System.out.println(e.getMessage());
 			}
-
 		}
 		return false;
-
-}
+	}
 	private Transfer makeTransfer(int choice, String amount, String transferType, String transferStatus) {
 		int transferTypeId = restTransferTypesServices.getTransferType(currentUser, transferType).getTransferTypeId();
 		int transferStatusId = restTransferStatusService.getTransferStatus(currentUser, transferStatus).getTransferStatusId();
@@ -236,7 +247,6 @@ public class App {
 		}
 		double transferAmount = Double.parseDouble(amount);
 		Transfer transfer = new Transfer();
-//		transfer.setTransferId(getMaxIdPlusOne());
 		transfer.setTransferTypeId(transferTypeId);
 		transfer.setTransferStatusId(transferStatusId);
 		transfer.setAccountFrom(accountFromId);
@@ -260,8 +270,10 @@ public class App {
 					}
 				}
 				if (!validTransferIdChoice) {
+					throw new TransferIdException();
 				}
-			} catch ( RuntimeException e){
+			} catch ( TransferIdException e){
+				System.out.println(e.getMessage());
 
 			}
 		}
@@ -285,12 +297,7 @@ private void printTransferDetail(AuthenticatedUser authenticatedUser, Transfer t
 
 
 	private void printTransferDetails(AuthenticatedUser authenticatedUser, Transfer transferChoice) {
-//		int id = transferChoice.getTransferId();
-//		double amount = transferChoice.getAmount();
-//		int fromAccount = transferChoice.getAccountFrom();
-//		int toAccount = transferChoice.getAccountTo();
-//		int transactionTypeId = transferChoice.getTransferTypeId();
-//		int transactionStatusId = transferChoice.getTransferStatusId();
+
 		TransferTypes transferTypes = restTransferTypesServices.getTransferTypeFromId(currentUser, transferChoice.getTransferTypeId());
 		TransferStatuses transferStatuses = restTransferStatusService.getTransferStatusById(currentUser, transferChoice.getTransferStatusId());
 
@@ -299,10 +306,8 @@ private void printTransferDetail(AuthenticatedUser authenticatedUser, Transfer t
 		User fromUser = userService.getUserByUserId(currentUser, fromAccount.getUserId());
 		Account toAccount = restAccountService.getAccountByAccountId(currentUser, transferChoice.getAccountTo());
 		User toUser = userService.getUserByUserId(currentUser, toAccount.getUserId());
-
-		int fromUserId = fromAccount.getUserId();
 		String fromUserName = fromUser.getUsername();
-		int toUserId = toAccount.getUserId();
+
 
 		String toUserName = toUser.getUsername();
 		String transactionType = transferTypes.getTransferTypeDesc();

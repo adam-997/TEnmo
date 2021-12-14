@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.controller;
 import com.techelevator.tenmo.dao.*;
+import com.techelevator.tenmo.exceptions.InsufficientFunds;
 import com.techelevator.tenmo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -92,7 +93,7 @@ public class AccountController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/transfers/{id}", method = RequestMethod.POST)
-    public void makeTransfer(@RequestBody Transfer transfer, @PathVariable int id){
+    public void makeTransfer(@RequestBody Transfer transfer, @PathVariable int id) throws InsufficientFunds {
         double amount= transfer.getAmount();
         Account accountFrom = accountDao.getAccountByAccountId(transfer.getAccountFrom());
         Account accountTo = accountDao.getAccountByAccountId(transfer.getAccountTo());
@@ -106,7 +107,7 @@ public class AccountController {
         accountDao.updateAccount(accountTo);
     }
     @RequestMapping(path="/transfers/{id}", method = RequestMethod.PUT)
-    public void updateTransferStatus(@RequestBody Transfer transfer, @PathVariable int id)  {
+    public void updateTransferStatus(@RequestBody Transfer transfer, @PathVariable int id) throws InsufficientFunds {
 
         if(transfer.getTransferStatusId() == transferStatusesDao.getTransferStatusByDesc("Approved").getTransferStatusId()) {
 
