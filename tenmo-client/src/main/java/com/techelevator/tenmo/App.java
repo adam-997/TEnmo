@@ -84,16 +84,24 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		System.out.println("---------------------------------------------------");
-		System.out.println("Transfers");
-		System.out.println("ID	From/To	Amount");
-		System.out.println("---------------------------------------------------");
 		Transfer[] transfers = restTransferService.getTransfersByUserId(currentUser, currentUser.getUser().getId());
-		for (Transfer transfer : transfers) {
-			System.out.println(transfer);
-			System.out.println("---------------------------------------------------");
+		System.out.println("-------------------------------");
+		System.out.println("Transfers");
+		System.out.println("ID     From/To          Amount");
+		System.out.println("-------------------------------");
+
+		int currentUserAccountId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
+		for(Transfer transfer: transfers) {
+			System.out.println(transfer.getTransferId());
+		}
+
+		int transferIdChoice = console.getUserInputInteger("\nPlease enter transfer ID to view details (0 to cancel)");
+		Transfer transferChoice = validateTransferIdChoice(transferIdChoice, transfers, currentUser);
+		if(transferChoice != null) {
+			printTransferDetails(currentUser, transferChoice);
 		}
 	}
+
 
 	private void viewPendingRequests() {
 		System.out.println("---------------------------------------------------");
@@ -119,12 +127,23 @@ public class App {
 				String amount = console.getUserInput("Please enter the amount you would like to transfer: ");
 				makeTransfer(choice, amount, "Send", "Approved");
 		}
-		// TODO Auto-generated method stub
-
 	}
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
+		System.out.println("---------------------------------------------------");
+		System.out.println("Users ");
+		System.out.println("ID	Name");
+		System.out.println("---------------------------------------------------");
+		User[] users = userService.getAllUsers(currentUser);
+		for (User user : users) {
+			System.out.println(user.getId() + "     " + user.getUsername());
+		}
+		int choice = console.getUserInputInteger("Enter user id of the person you would like to receive money from: ");
+			if (userIdChoice(choice,users, currentUser)){
+
+				String amount = console.getUserInput("Please enter the amount you would like to request: ");
+				makeTransfer(choice, amount, "Request", "Pending");
+			}
 
 	}
 
@@ -230,17 +249,43 @@ public class App {
 		return transfer;
 	}
 
+	private Transfer validateTransferIdChoice(int transferIdChoice, Transfer[] transfers, AuthenticatedUser currentUser) {
+		Transfer transferChoice = null;
+		if(transferIdChoice != 0) {
+			try {
+				boolean validTransferIdChoice = false;
+				for (Transfer transfer : transfers) {
+					if (transfer.getTransferId() == transferIdChoice) {
+						validTransferIdChoice = true;
+						transferChoice = transfer;
+						break;
+					}
+				}
+				if (!validTransferIdChoice) {
+				}
+			} catch ( RuntimeException e){
 
-	private int getMaxID() {
-		int maxID = 0;
-		for (Transfer t : restTransferService.getAllTransfers(currentUser)) {
-			if (t.getTransferId() > maxID) {
-				maxID = t.getTransferId();
 			}
 		}
-		return maxID;
+		return transferChoice;
 	}
-	private int getMaxIdPlusOne() {
-		return getMaxID() + 1;
+
+	private void printTransferDetails(AuthenticatedUser currentUser, Transfer transferChoice) {
+		int id = transferChoice.getTransferId();
+		double amount = transferChoice.getAmount();
+		int fromAccount = transferChoice.getAccountFrom();
+		int toAccount = transferChoice.getAccountTo();
+		int transactionTypeId = transferChoice.getTransferTypeId();
+		int transactionStatusId = transferChoice.getTransferStatusId();
+
+		int fromUserId = restAccountService.getAccountByUserId(currentUser, fromAccount).getUserId();
+		String fromUserName = userService.getUserByUserId(currentUser, fromUserId).getUsername();
+		int toUserId = restAccountService.getAccountByUserId(currentUser, toAccount).getUserId();
+		String toUserName = userService.getUserByUserId(currentUser, toUserId).getUsername();
+		String transactionType = restTransferTypesServices.getTransferTypeFromId(currentUser, transactionTypeId).getTransferTypeDesc();
+		String transactionStatus = restTransferStatusService.getTransferStatusById(currentUser, transactionStatusId).getDescription();
+
+		console.printTransferDetails(id, fromUserName, toUserName, transactionType, transactionStatus, amount);
 	}
+
 }

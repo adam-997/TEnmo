@@ -82,4 +82,16 @@ public class ConsoleService {
 		out.println("---------");
 		out.flush();
 	}
+
+	public void printTransferDetails(int id, String from, String to, String type, String status, double amount) {
+		out.println("-------------------------------");
+		out.println("Transfer Details");
+		out.println("-------------------------------");
+		out.println("Id: " + id);
+		out.println("From: " + from);
+		out.println("To: " + to);
+		out.println("Type: " + type);
+		out.println("Status: " + status);
+		out.println("Amount: $" + amount);
+	}
 }

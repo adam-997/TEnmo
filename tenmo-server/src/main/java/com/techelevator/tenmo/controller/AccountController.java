@@ -41,12 +41,12 @@ public class AccountController {
         return userDao.getUserByUserId(userId);
     }
 
-    @RequestMapping(path = "/transfers/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/transfers/userid/{userId}", method = RequestMethod.GET)
     public List<Transfer> getTransfersByUserId(@PathVariable int userId){
         return transfersDao.getTransfersByUserId(userId);
     }
 
-    @RequestMapping(path = "/transfers/{transferId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/transfers/transferid/{transferId}", method = RequestMethod.GET)
     public Transfer getTransfersByTransferId(@PathVariable int transferId){
         return transfersDao.getTransferByTransferId(transferId);
     }
