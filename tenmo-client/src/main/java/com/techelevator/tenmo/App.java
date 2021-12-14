@@ -89,8 +89,6 @@ public class App {
 		System.out.println("Transfers");
 		System.out.println("ID     From/To          Amount");
 		System.out.println("-------------------------------");
-
-		int currentUserAccountId = restAccountService.getAccountByUserId(currentUser, currentUser.getUser().getId()).getAccountId();
 		for(Transfer transfer: transfers) {
 			printTransferDetail(currentUser ,transfer);
 		}
@@ -278,7 +276,7 @@ private void printTransferDetail(AuthenticatedUser authenticatedUser, Transfer t
 			String userFromName = userService.getUserByUserId(currentUser, accountFromUserId).getUsername();
 			fromTo = "From: " + userFromName;
 		} else {
-				int userId = restAccountService.getAccountByUserId(currentUser, accountTo).getUserId();
+				int userId = restAccountService.getAccountByAccountId(currentUser, accountTo).getUserId();
 				String userToName = userService.getUserByUserId(currentUser, userId).getUsername();
 				fromTo = "To: " + userToName;
 		}
@@ -286,22 +284,31 @@ private void printTransferDetail(AuthenticatedUser authenticatedUser, Transfer t
 }
 
 
-	private void printTransferDetails(AuthenticatedUser currentUser, Transfer transferChoice) {
-		int id = transferChoice.getTransferId();
-		double amount = transferChoice.getAmount();
-		int fromAccount = transferChoice.getAccountFrom();
-		int toAccount = transferChoice.getAccountTo();
-		int transactionTypeId = transferChoice.getTransferTypeId();
-		int transactionStatusId = transferChoice.getTransferStatusId();
+	private void printTransferDetails(AuthenticatedUser authenticatedUser, Transfer transferChoice) {
+//		int id = transferChoice.getTransferId();
+//		double amount = transferChoice.getAmount();
+//		int fromAccount = transferChoice.getAccountFrom();
+//		int toAccount = transferChoice.getAccountTo();
+//		int transactionTypeId = transferChoice.getTransferTypeId();
+//		int transactionStatusId = transferChoice.getTransferStatusId();
+		TransferTypes transferTypes = restTransferTypesServices.getTransferTypeFromId(currentUser, transferChoice.getTransferTypeId());
+		TransferStatuses transferStatuses = restTransferStatusService.getTransferStatusById(currentUser, transferChoice.getTransferStatusId());
 
-		int fromUserId = restAccountService.getAccountByUserId(currentUser, fromAccount).getUserId();
-		String fromUserName = userService.getUserByUserId(currentUser, fromUserId).getUsername();
-		int toUserId = restAccountService.getAccountByUserId(currentUser, toAccount).getUserId();
-		String toUserName = userService.getUserByUserId(currentUser, toUserId).getUsername();
-		String transactionType = restTransferTypesServices.getTransferTypeFromId(currentUser, transactionTypeId).getTransferTypeDesc();
-		String transactionStatus = restTransferStatusService.getTransferStatusById(currentUser, transactionStatusId).getDescription();
 
-		console.printTransferDetails(id, fromUserName, toUserName, transactionType, transactionStatus, amount);
+		Account fromAccount = restAccountService.getAccountByAccountId(currentUser, transferChoice.getAccountFrom());
+		User fromUser = userService.getUserByUserId(currentUser, fromAccount.getUserId());
+		Account toAccount = restAccountService.getAccountByAccountId(currentUser, transferChoice.getAccountTo());
+		User toUser = userService.getUserByUserId(currentUser, toAccount.getUserId());
+
+		int fromUserId = fromAccount.getUserId();
+		String fromUserName = fromUser.getUsername();
+		int toUserId = toAccount.getUserId();
+
+		String toUserName = toUser.getUsername();
+		String transactionType = transferTypes.getTransferTypeDesc();
+		String transactionStatus = transferStatuses.getDescription();
+
+		console.printTransferDetails(transferChoice.getTransferId(), fromUserName, toUserName, transactionType, transactionStatus, transferChoice.getAmount());
 	}
 
 }

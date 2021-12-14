@@ -29,9 +29,9 @@ public class JdbcTransferTypes implements TransferTypesDao {
     }
 
     @Override
-    public TransferTypes getTransferTypeById(int transferId) {
+    public TransferTypes getTransferTypeById(int transferTypeId) {
         String sql = "SELECT * FROM transfer_types WHERE transfer_type_id = ?;";
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferId);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferTypeId);
         TransferTypes transferTypes = null;
         if(results.next()) {
             transferTypes = mapRowToTransferTypes(results);

@@ -1,5 +1,4 @@
 package com.techelevator.tenmo.controller;
-
 import com.techelevator.tenmo.dao.*;
 import com.techelevator.tenmo.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,7 @@ public class AccountController {
         return userDao.findAll();
     }
 
-    @RequestMapping(path = "/users/userid/{userId}", method = RequestMethod.GET)
+    @RequestMapping(path = "/users/{userId}", method = RequestMethod.GET)
     public User getUserByUserId(@PathVariable int userId){
         return userDao.getUserByUserId(userId);
     }
@@ -61,14 +60,14 @@ public class AccountController {
         return accountDao.getAccountByUserId(userId);
     }
 
-    @RequestMapping(path = "/users/{username}", method = RequestMethod.GET)
-    public User getUserByUsername(@PathVariable String username){
-        return userDao.findByUsername(username);
-    }
+//    @RequestMapping(path = "/users/{username}", method = RequestMethod.GET)
+//    public User getUserByUsername(@PathVariable String username){
+//        return userDao.findByUsername(username);
+//    }
 
-    @RequestMapping(path = "/transfertype/{id}", method = RequestMethod.GET)
-    public TransferTypes getTransferDescById(@PathVariable int transferId){
-        return transferTypesDao.getTransferTypeById(transferId);
+    @RequestMapping(path = "/transfertype/{transferTypeId}", method = RequestMethod.GET)
+    public TransferTypes getTransferDescById(@PathVariable int transferTypeId){
+        return transferTypesDao.getTransferTypeById(transferTypeId);
     }
 
     @RequestMapping(path = "/transfertype/filter", method = RequestMethod.GET)
@@ -81,7 +80,7 @@ public class AccountController {
         return transferStatusesDao.getTransferStatusByDesc(description);
     }
 
-    @RequestMapping(path = "/transferstatus/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/transferstatus/{transferStatusId}", method = RequestMethod.GET)
     public TransferStatuses getTransferStatusById(@PathVariable int transferStatusId){
         return transferStatusesDao.getTransferStatusById(transferStatusId);
     }
