@@ -94,7 +94,10 @@ public class AccountController {
     @ResponseStatus(HttpStatus.CREATED)
     @RequestMapping(path = "/transfers/{id}", method = RequestMethod.POST)
     public void makeTransfer(@RequestBody Transfer transfer, @PathVariable int id) throws InsufficientFunds {
-        double amount= transfer.getAmount();
+        double amount = transfer.getAmount();
+        if (amount > getAccountByAccountId(transfer.getAccountFrom()).getBalance().getBalance()){
+            throw new InsufficientFunds();
+        }
         Account accountFrom = accountDao.getAccountByAccountId(transfer.getAccountFrom());
         Account accountTo = accountDao.getAccountByAccountId(transfer.getAccountTo());
 
